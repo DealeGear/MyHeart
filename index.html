@@ -17,9 +17,27 @@
       color: white;
       padding: 20px;
       text-align: center;
+      position: relative;
     }
-    h1, p {
+    header h1, header p {
       margin: 0;
+    }
+    /* Estilo do link no cabeçalho */
+    header a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      border: 1px solid #fff;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    header a:hover {
+      background-color: #fff;
+      color: #004d7a;
     }
     .container {
       display: flex;
@@ -82,6 +100,7 @@
 </head>
 <body>
   <header>
+    <a href="https://dealegear.wixsite.com/meusite" target="_blank">Retornar para DealeGear</a>
     <h1>Projeto MyHeart</h1>
     <p>Simulação Virtual do Coração</p>
   </header>
