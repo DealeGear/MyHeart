@@ -19,4 +19,249 @@
       text-align: center;
     }
     h1, p {
-      margin:
+      margin: 0;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 20px;
+    }
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    .control-group {
+      margin: 10px 20px;
+      text-align: center;
+      flex: 1;
+      min-width: 250px;
+    }
+    label {
+      font-size: 1rem;
+      margin-bottom: 5px;
+      display: block;
+    }
+    input[type="range"] {
+      width: 100%;
+      max-width: 300px;
+    }
+    /* Container para os canvas */
+    .canvas-container {
+      width: 90%;
+      max-width: 600px;
+      margin: 20px 0;
+    }
+    canvas {
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    @media (max-width: 600px) {
+      .controls {
+        flex-direction: column;
+        align-items: center;
+      }
+      .control-group {
+        margin: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Projeto MyHeart</h1>
+    <p>Simulação Virtual do Coração</p>
+  </header>
+
+  <div class="container">
+    <!-- Canvas para desenho do coração -->
+    <div class="canvas-container">
+      <canvas id="heartCanvas"></canvas>
+    </div>
+
+    <!-- Controles para parâmetros -->
+    <div class="controls">
+      <div class="control-group">
+        <label for="heartRate">Batimento Cardíaco (BPM): <span id="heartRateValue">72</span></label>
+        <input type="range" id="heartRate" min="40" max="180" value="72">
+      </div>
+      <div class="control-group">
+        <label for="bloodPressure">Pressão Arterial (mmHg): <span id="bloodPressureValue">120</span></label>
+        <input type="range" id="bloodPressure" min="80" max="180" value="120">
+      </div>
+    </div>
+
+    <!-- Canvas para o gráfico -->
+    <div class="canvas-container">
+      <canvas id="chartCanvas"></canvas>
+    </div>
+  </div>
+
+  <!-- Inclusão da biblioteca Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Função para redimensionar o canvas do coração com base no seu contêiner
+    function resizeCanvas(canvas) {
+      canvas.width = canvas.clientWidth;
+      // Para o canvas do coração, mantemos o aspecto quadrado
+      if (canvas.id === 'heartCanvas') {
+        canvas.height = canvas.clientWidth;
+      } else if (canvas.id === 'chartCanvas') {
+        // Para o gráfico, definimos uma altura fixa (ou proporcional, se preferir)
+        canvas.height = 300;
+      }
+    }
+    
+    // Redimensiona o canvas ao carregar e ao redimensionar a janela
+    function adjustCanvases() {
+      resizeCanvas(document.getElementById('heartCanvas'));
+      resizeCanvas(document.getElementById('chartCanvas'));
+    }
+    window.addEventListener('resize', adjustCanvases);
+    window.addEventListener('load', adjustCanvases);
+
+    // Variáveis globais para os parâmetros
+    let heartRate = 72;      // BPM
+    let bloodPressure = 120; // mmHg
+
+    // Elementos dos controles
+    const heartRateSlider = document.getElementById("heartRate");
+    const bloodPressureSlider = document.getElementById("bloodPressure");
+    const heartRateValueSpan = document.getElementById("heartRateValue");
+    const bloodPressureValueSpan = document.getElementById("bloodPressureValue");
+
+    // Atualiza os valores quando os sliders são movimentados
+    heartRateSlider.addEventListener("input", function() {
+      heartRate = parseInt(this.value);
+      heartRateValueSpan.textContent = this.value;
+    });
+
+    bloodPressureSlider.addEventListener("input", function() {
+      bloodPressure = parseInt(this.value);
+      bloodPressureValueSpan.textContent = this.value;
+    });
+
+    /* =========================
+       Animação do Coração no Canvas
+       ========================= */
+    const heartCanvas = document.getElementById("heartCanvas");
+    const ctx = heartCanvas.getContext("2d");
+    let startTime = null;
+
+    // Função para desenhar um coração usando curvas de Bézier
+    function drawHeart(x, y, size, color) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(size, size);
+      ctx.beginPath();
+      // Desenha a forma de coração
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(0, -0.3, -0.5, -0.3, -0.5, 0);
+      ctx.bezierCurveTo(-0.5, 0.3, 0, 0.5, 0, 0.8);
+      ctx.bezierCurveTo(0, 0.5, 0.5, 0.3, 0.5, 0);
+      ctx.bezierCurveTo(0.5, -0.3, 0, -0.3, 0, 0);
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // Função de animação que utiliza o batimento cardíaco para pulsar o coração
+    function animateHeart(timestamp) {
+      if (!startTime) startTime = timestamp;
+      let elapsed = timestamp - startTime;
+      // Calcula o período do batimento (em milissegundos): 60000/BPM
+      let period = 60000 / heartRate;
+      // Fator de escala oscilante (efeito pulsante)
+      let scale = 1 + 0.15 * Math.abs(Math.sin((2 * Math.PI * elapsed) / period));
+
+      // Mapeia a pressão arterial para a intensidade da cor: 
+      // Pressão mais alta resulta em um vermelho mais intenso
+      let redValue = Math.floor(150 + ((bloodPressure - 80) / (180 - 80)) * 105);
+      let heartColor = `rgb(${redValue}, 0, 0)`;
+
+      // Limpa o canvas
+      ctx.clearRect(0, 0, heartCanvas.width, heartCanvas.height);
+      // Desenha o coração centralizado; o tamanho é proporcional à largura do canvas
+      drawHeart(heartCanvas.width / 2, heartCanvas.height / 2, scale * (heartCanvas.width / 6), heartColor);
+
+      requestAnimationFrame(animateHeart);
+    }
+    requestAnimationFrame(animateHeart);
+
+    /* =========================
+       Configuração do Gráfico (Chart.js)
+       ========================= */
+    const chartCtx = document.getElementById("chartCanvas").getContext("2d");
+    let chartData = {
+      labels: [],
+      datasets: [
+        {
+          label: 'Batimento Cardíaco (BPM)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          data: [],
+          fill: false,
+          tension: 0.3,
+        },
+        {
+          label: 'Pressão Arterial (mmHg)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          data: [],
+          fill: false,
+          tension: 0.3,
+        }
+      ]
+    };
+
+    const myChart = new Chart(chartCtx, {
+      type: 'line',
+      data: chartData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Tempo (s)'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Valor'
+            },
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    let timeCounter = 0;
+    // A cada segundo, atualiza o gráfico com os valores atuais dos parâmetros
+    setInterval(() => {
+      timeCounter++;
+      chartData.labels.push(timeCounter.toString());
+      chartData.datasets[0].data.push(heartRate);
+      chartData.datasets[1].data.push(bloodPressure);
+      // Limita o gráfico aos últimos 20 pontos
+      if (chartData.labels.length > 20) {
+        chartData.labels.shift();
+        chartData.datasets[0].data.shift();
+        chartData.datasets[1].data.shift();
+      }
+      myChart.update();
+    }, 1000);
+  </script>
+</body>
+</html>
