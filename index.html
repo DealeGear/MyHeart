@@ -49,10 +49,16 @@
       width: 100%;
       max-width: 300px;
     }
-    /* Container para os canvas */
-    .canvas-container {
+    /* Contêiner do canvas do coração - área reduzida */
+    .heart-canvas-container {
       width: 90%;
-      max-width: 600px;
+      max-width: 300px;
+      margin: 20px 0;
+    }
+    /* Contêiner do gráfico - área ampliada */
+    .chart-canvas-container {
+      width: 90%;
+      max-width: 800px;
       margin: 20px 0;
     }
     canvas {
@@ -82,7 +88,7 @@
 
   <div class="container">
     <!-- Canvas para desenho do coração -->
-    <div class="canvas-container">
+    <div class="heart-canvas-container">
       <canvas id="heartCanvas"></canvas>
     </div>
 
@@ -99,7 +105,7 @@
     </div>
 
     <!-- Canvas para o gráfico -->
-    <div class="canvas-container">
+    <div class="chart-canvas-container">
       <canvas id="chartCanvas"></canvas>
     </div>
   </div>
@@ -107,19 +113,19 @@
   <!-- Inclusão da biblioteca Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // Função para redimensionar o canvas do coração com base no seu contêiner
+    // Função para redimensionar os canvas com base no tamanho de seus contêineres
     function resizeCanvas(canvas) {
       canvas.width = canvas.clientWidth;
-      // Para o canvas do coração, mantemos o aspecto quadrado
       if (canvas.id === 'heartCanvas') {
+        // Mantém o canvas do coração quadrado
         canvas.height = canvas.clientWidth;
       } else if (canvas.id === 'chartCanvas') {
-        // Para o gráfico, definimos uma altura fixa (ou proporcional, se preferir)
-        canvas.height = 300;
+        // Define uma altura maior para o gráfico
+        canvas.height = 400;
       }
     }
     
-    // Redimensiona o canvas ao carregar e ao redimensionar a janela
+    // Redimensiona os canvas ao carregar e ao redimensionar a janela
     function adjustCanvases() {
       resizeCanvas(document.getElementById('heartCanvas'));
       resizeCanvas(document.getElementById('chartCanvas'));
