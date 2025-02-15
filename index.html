@@ -221,6 +221,10 @@
       shininess: 100
     });
     const heartMesh = new THREE.Mesh(heartGeometry, heartMaterial);
+    
+    // Corrige a orientação do coração (virando 180º no eixo X)
+    heartMesh.rotation.x = Math.PI;
+    
     heartScene.add(heartMesh);
 
     // Iluminação
