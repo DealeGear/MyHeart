@@ -1,0 +1,83 @@
+simulador de coração humano virtual
+>
+> ### Requisitos de alto nível
+>
+> * **Fisiologia simplificada mas crível**: frequências e formas de onda realistas; cálculos coerentes (mesmo que aproximados).
+> * **2 gráficos em tempo real** (canvas):
+>
+>   1. **ECG derivação II** (mV vs tempo, 25 mm/s equivalente)
+>   2. **Pressão arterial ou SpO₂** (escolha e implemente um; ideal: **pressão arterial sistêmica** com sístole/diástole bem definidas).
+>      *Opcional*: alternar o 2º gráfico entre **PA**, **SpO₂** e **PCG (fonocardiograma)**.
+> * **Modelo 3D do coração (Three.js)**: coração batendo (dilatação/contração) sincronizado ao ciclo cardíaco. Reagir aos controles (taquicardia = batidas mais rápidas, hipocontratilidade = amplitude menor, etc.). Se não for possível 3D agora, forneça um fallback 2D animado.
+> * **Controles (UI) com sliders/switches**:
+>
+>   * **Frequência cardíaca (BPM)**: 30–220.
+>   * **Contractilidade (inotropismo)**: 0–200% (altera **volume sistólico** e amplitude da PA).
+>   * **Pré-carga** (retorno venoso): 0–200% (afeta **volume diastólico final**).
+>   * **Pós-carga / Resistência vascular sistêmica**: 0–200% (impacta **pressão arterial** e débito).
+>   * **FiO₂ / O₂ inspirado**: 10–100% (afeta **SpO₂** com atraso fisiológico simples).
+>   * **Volume sanguíneo** (simular **hipovolemia**): 50–120% (reduz retorno venoso e PA).
+>   * **Arritmia (presets)**: Normal, **FA (fibrilação atrial)**, **Flutter**, **Extrassístoles** (isoladas e bigeminismo), **Taquicardia Ventricular**, **Bradicardia Sinusal**, **BAV 1º/2º/3º**. Ajuste a lógica do marcapasso sinusal/AV para alterar o **intervalo RR** e morfologia do **QRS** quando apropriado.
+>   * **Isquemia/Hipóxia** (toggle): distorcer segmento ST/T no ECG, reduzir SpO₂ e contractilidade com atraso gradual.
+>   * **Áudio on/off**: som de **S1/S2** (batida “lub-dub”) sincronizado; volume (0–100%). Em taquiarritmias, os sons aceleram; em FA, intervalos variam.
+> * **Indicadores calculados** (numéricos, atualizados em tempo real):
+>
+>   * **FC (bpm)**, **VS (mL)**, **DC/CO (L/min = FC × VS)**, **PAS/PAD/MAP** (usar modelo de Windkessel simples), **SpO₂ (%)**, **Ritmo atual**.
+> * **Física/Equações simplificadas**:
+>
+>   * **CO = HR × SV**; **MAP ≈ CO × SVR** (limite valores plausíveis).
+>   * **SV** cresce com **pré-carga** (Lei de Frank-Starling) e **inotropismo**; cai com **pós-carga**.
+>   * **Hipovolemia** ↓pré-carga → ↓SV → ↓PA/MAP; **hipóxia** ↓inotropismo e ↓SpO₂.
+>   * **Barorreflexo opcional**: se **MAP** cair muito, tendência a ↑FC (se toggle de reflexo estiver ON).
+> * **ECG sintético**: gerar P, QRS, T com tempos ajustáveis (PR, QRS, QT). Em arritmias, altere **intervalos RR**, presença/ausência de onda P, relação P\:QRS e largura do QRS.
+> * **Gráficos**:
+>
+>   * Canvas puro ou Chart.js (sem dependência pesada). Escalas e grades discretas.
+>   * **Buffer circular** de \~10–15 s com rolagem contínua.
+>   * Taxa de atualização suave (requestAnimationFrame).
+> * **Arquitetura e qualidade**:
+>
+>   * **TypeScript** preferível; separar **modelo fisiológico**, **render 3D**, **áudio** e **UI**.
+>   * Código limpo, comentado e extensível.
+>   * Sem servidores: **tudo client-side**.
+> * **Acessibilidade e UX**:
+>
+>   * Tema claro/escuro, labels legíveis, teclado acessível, tooltips com explicações fisiológicas curtas.
+>   * Botões: **Reset para estado normal**, **Pausar simulação**, **Snapshot** (baixar PNG do gráfico).
+>
+> ### Layout sugerido (responsivo)
+>
+> * **Topo**: título, switches (Som ON/OFF, Reflexo barorreceptor ON/OFF), botão Reset.
+> * **Esquerda**: **coração 3D (Three.js)** batendo.
+> * **Direita**: **gráficos** (ECG em cima, PA/SpO₂ em baixo).
+> * **Base**: **painel de controles** (sliders e selects) + indicadores numéricos (FC, SV, CO, PAS/PAD/MAP, SpO₂).
+>
+> ### Presets (botões)
+>
+> * **Normal (FC 70, VS 70 mL, MAP \~90)**
+> * **FA** (RR irregular, ausência de P, leve queda de SV)
+> * **Taquicardia Sinusal (FC 140)**
+> * **Bradicardia Sinusal (FC 45)**
+> * **Hipovolemia moderada (Vol 70%, MAP↓)**
+> * **Hipóxia (FiO₂ 14%, SpO₂↓, inotropismo↓)**
+> * **TV monomórfica (QRS largo, FC 160–200, PA instável)**
+>
+> ### Áudio (Web Audio API)
+>
+> * Gerar **dois sons por ciclo** (S1 ligeiramente mais forte que S2) com envelopes curtos; sincronizar com **fechamento mitral/tricúspide** (S1) e **aórtica/pulmonar** (S2) relativos à curva de pressão.
+> * Controle de **volume** e **mute**. Em arritmia, o padrão temporal dos sons segue o RR.
+>
+> ### Entregáveis
+>
+> * Arquivo único ou estrutura simples (`index.html`, `main.ts`, `physiology.ts`, `audio.ts`, `viz3d.ts`, `charts.ts`, `styles.css`).
+> * **Sem build complexo**; se usar bundler, forneça script `npm run dev`.
+> * **README** curto explicando sliders, presets e fórmulas usadas.
+>
+> ### Critérios de aceitação
+>
+> * Gráficos e modelo 3D **sincronizados** à FC.
+> * Ajustes de **pré/pós-carga, inotropismo, FiO₂ e volume** alteram **SV, CO e MAP** de forma coerente.
+> * **Arritmias** mudam padrão do ECG e o intervalo RR visivelmente.
+> * **Som** liga/desliga e acompanha o ritmo.
+> * Performance fluida (60 FPS em desktop médio) e **sem erros de console**.
+>
