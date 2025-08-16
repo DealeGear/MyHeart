@@ -1,6 +1,8 @@
+
+
 # Simulador de Coração Humano Virtual
 
-Um simulador educacional interativo de fisiologia cardíaca que permite visualizar e controlar parâmetros cardíacos em tempo real.
+Um simulador educacional interativo de fisiologia cardíaca que permite visualizar e controlar parâmetros cardíacos em tempo real. Desenvolvido com HTML, CSS e JavaScript puro, utilizando Three.js para a visualização 3D e Web Audio API para os sons cardíacos.
 
 ## Funcionalidades
 
@@ -67,9 +69,95 @@ O simulador utiliza equações fisiológicas simplificadas mas baseadas em princ
 - **Bradicardia Sinusal**: Frequência cardíaca < 60 bpm
 - **BAV**: Bloqueio atrioventricular de diferentes graus
 
-## Requisitos Técnicos
+## Tecnologias Utilizadas
 
-- Navegador moderno com suporte a WebGL e Web Audio API
-- TypeScript (opcional, para desenvolvimento)
+- **HTML5**: Estrutura semântica da página
+- **CSS3**: Estilos e layout responsivo
+- **JavaScript ES6+**: Lógica da aplicação
+- **Three.js**: Renderização 3D do coração
+- **Web Audio API**: Geração de sons cardíacos
+- **Canvas API**: Renderização dos gráficos em tempo real
 
 ## Estrutura do Projeto
+
+```
+heart-simulator/
+├── index.html          # Estrutura HTML principal
+├── styles.css          # Estilos CSS
+└── main.js             # Lógica principal da aplicação
+```
+
+## Instalação e Execução
+
+1. **Clonar ou baixar o repositório**
+   ```bash
+   git clone https://github.com/seu-usuario/heart-simulator.git
+   cd heart-simulator
+   ```
+
+2. **Abrir o arquivo index.html em um navegador moderno**
+   - Basta abrir o arquivo `index.html` diretamente no navegador
+   - Ou usar um servidor local (recomendado para melhor desempenho):
+     ```bash
+     # Usando Python
+     python -m http.server
+     # Ou usando Node.js com http-server
+     npx http-server
+     ```
+
+3. **Acessar o simulador**
+   - Abra o navegador e acesse `http://localhost:8000` (ou a porta configurada)
+
+## Requisitos Técnicos
+
+- Navegador moderno com suporte a:
+  - WebGL (para Three.js)
+  - Web Audio API
+  - Canvas API
+  - ES6+ (JavaScript moderno)
+
+## Personalização
+
+### Adicionar Novas Arritmias
+
+Para adicionar uma nova arritmia:
+
+1. No arquivo `main.js`, localize a classe `PhysiologyModel`
+2. Adicione o novo tipo de arritmia no método `calculateNextBeatTime()`
+3. Implemente a lógica específica para a nova arritmia
+4. Atualize o método `getRhythmDescription()` para incluir a nova arritmia
+5. Adicione a nova opção no elemento `<select id="arrhythmia-select">` no HTML
+
+### Modificar Parâmetros Fisiológicos
+
+Para ajustar as equações fisiológicas:
+
+1. No arquivo `main.js`, localize a classe `PhysiologyModel`
+2. Modifique os métodos relevantes:
+   - `calculateIndicators()` para cálculos de VS, DC, PA, etc.
+   - `generateECGPoint()` para alterar a forma do ECG
+   - `generatePressurePoint()` para modificar a curva de pressão
+
+### Personalizar a Visualização 3D
+
+Para modificar o modelo 3D do coração:
+
+1. No arquivo `main.js`, localize a classe `HeartVisualization`
+2. Modifique o método `createHeartModel()` para alterar a geometria
+3. Ajuste as cores e materiais no método `updateColor()`
+
+## Licença
+
+Este projeto é apenas para fins educacionais. Não substitui monitoramento clínico real.
+
+## Contribuições
+
+Contribuições são bem-vindas! Sinta-se à vontade para abrir uma issue ou enviar um pull request.
+
+## Créditos
+
+Desenvolvido como simulador educacional de fisiologia cardíaca.
+
+## Aviso
+
+Este simulador é uma ferramenta educacional e não deve ser usado para diagnóstico ou tratamento médico. As simulações são simplificações da fisiologia real e podem não refletir com precisão todas as condições clínicas.
