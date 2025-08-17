@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Coração Humano Virtual</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>Simulador de Coração Humano Virtual</h1>
+            <div class="header-controls">
+                <div class="toggle-container">
+                    <label for="audio-toggle">Áudio</label>
+                    <input type="checkbox" id="audio-toggle" checked>
+                    <span class="toggle-slider"></span>
+                </div>
+                <div class="toggle-container">
+                    <label for="baroreflex-toggle">Reflexo Barorreceptor</label>
+                    <input type="checkbox" id="baroreflex-toggle" checked>
+                    <span class="toggle-slider"></span>
+                </div>
+                <button id="reset-btn" class="btn">Resetar</button>
+                <button id="pause-btn" class="btn">Pausar</button>
+                <button id="snapshot-btn" class="btn">Snapshot</button>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <div class="visualization-container">
+                <div id="heart-container" class="heart-3d"></div>
+            </div>
+            
+            <div class="charts-container">
+                <div class="chart-wrapper">
+                    <h3>ECG - Derivação II</h3>
+                    <canvas id="ecg-canvas"></canvas>
+                </div>
+                <div class="chart-wrapper">
+                    <h3 id="second-chart-title">Pressão Arterial Sistêmica</h3>
+                    <div class="chart-toggle">
+                        <button data-chart="pressure" class="active">PA</button>
+                        <button data-chart="spo2">SpO₂</button>
+                        <button data-chart="pcg">PCG</button>
+                    </div>
+                    <canvas id="second-chart-canvas"></canvas>
+                </div>
+            </div>
+        </main>
+
+        <div class="indicators-container">
+            <div class="indicator">
+                <span class="indicator-label">FC (bpm)</span>
+                <span id="hr-value" class="indicator-value">70</span>
+            </div>
+            <div class="indicator">
+                <span class="indicator-label">VS (mL)</span>
+                <span id="sv-value" class="indicator-value">70</span>
+            </div>
+            <div class="indicator">
+                <span class="indicator-label">DC (L/min)</span>
+                <span id="co-value" class="indicator-value">4.9</span>
+            </div>
+            <div class="indicator">
+                <span class="indicator-label">PAS/PAD (mmHg)</span>
+                <span id="bp-value" class="indicator-value">120/80</span>
+            </div>
+            <div class="indicator">
+                <span class="indicator-label">MAP (mmHg)</span>
+                <span id="map-value" class="indicator-value">93</span>
+            </div>
+            <div class="indicator">
+                <span class="indicator-label">SpO₂ (%)</span>
+                <span id="spo2-value" class="indicator-value">98</span>
+            </div>
+            <div class="indicator">
+                <span class="indicator-label">Ritmo</span>
+                <span id="rhythm-value" class="indicator-value">Normal</span>
+            </div>
+        </div>
+
+        <div class="controls-container">
+            <div class="presets-container">
+                <h3>Presets</h3>
+                <div class="presets-buttons">
+                    <button data-preset="normal" class="preset-btn active">Normal</button>
+                    <button data-preset="fa" class="preset-btn">FA</button>
+                    <button data-preset="sinus-tachy" class="preset-btn">Taquicardia Sinusal</button>
+                    <button data-preset="sinus-brady" class="preset-btn">Bradicardia Sinusal</button>
+                    <button data-preset="hypovolemia" class="preset-btn">Hipovolemia</button>
+                    <button data-preset="hypoxia" class="preset-btn">Hipóxia</button>
+                    <button data-preset="vt" class="preset-btn">TV Monomórfica</button>
+                </div>
+            </div>
+
+            <div class="sliders-container">
+                <div class="slider-control">
+                    <label for="hr-slider">Frequência Cardíaca (BPM): <span id="hr-slider-value">70</span></label>
+                    <input type="range" id="hr-slider" min="30" max="220" value="70" step="1">
+                </div>
+
+                <div class="slider-control">
+                    <label for="contractility-slider">Contractilidade (%): <span id="contractility-slider-value">100</span></label>
+                    <input type="range" id="contractility-slider" min="0" max="200" value="100" step="1">
+                </div>
+
+                <div class="slider-control">
+                    <label for="preload-slider">Pré-carga (%): <span id="preload-slider-value">100</span></label>
+                    <input type="range" id="preload-slider" min="0" max="200" value="100" step="1">
+                </div>
+
+                <div class="slider-control">
+                    <label for="afterload-slider">Pós-carga (%): <span id="afterload-slider-value">100</span></label>
+                    <input type="range" id="afterload-slider" min="0" max="200" value="100" step="1">
+                </div>
+
+                <div class="slider-control">
+                    <label for="fio2-slider">FiO₂ (%): <span id="fio2-slider-value">21</span></label>
+                    <input type="range" id="fio2-slider" min="10" max="100" value="21" step="1">
+                </div>
+
+                <div class="slider-control">
+                    <label for="volume-slider">Volume Sanguíneo (%): <span id="volume-slider-value">100</span></label>
+                    <input type="range" id="volume-slider" min="50" max="120" value="100" step="1">
+                </div>
+
+                <div class="slider-control">
+                    <label for="arrhythmia-select">Arritmia:</label>
+                    <select id="arrhythmia-select">
+                        <option value="normal">Normal</option>
+                        <option value="fa">Fibrilação Atrial (FA)</option>
+                        <option value="flutter">Flutter Atrial</option>
+                        <option value="pvcs">Extrassístoles</option>
+                        <option value="bigeminy">Bigeminismo</option>
+                        <option value="vt">Taquicardia Ventricular (TV)</option>
+                        <option value="sinus-brady">Bradicardia Sinusal</option>
+                        <option value="av-block-1">BAV 1º Grau</option>
+                        <option value="av-block-2">BAV 2º Grau</option>
+                        <option value="av-block-3">BAV 3º Grau</option>
+                    </select>
+                </div>
+
+                <div class="slider-control">
+                    <label for="ischemia-toggle">Isquemia/Hipóxia</label>
+                    <input type="checkbox" id="ischemia-toggle">
+                    <span class="toggle-slider"></span>
+                </div>
+
+                <div class="slider-control">
+                    <label for="audio-volume-slider">Volume do Áudio (%): <span id="audio-volume-slider-value">50</span></label>
+                    <input type="range" id="audio-volume-slider" min="0" max="100" value="50" step="1">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+:root {
+    --bg-color: #000;
+    --text-color: #0f0;
+    --ecg-color: #0f0;
+    --pressure-color: #f00;
+    --spo2-color: #00f;
+    --respiratory-color: #ff0;
+    --panel-bg: #111;
+    --border-color: #333;
+    --button-bg: #222;
+    --button-hover: #333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Removido overflow para prevenir rolagem */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 5px; /* Reduzido padding */
+    gap: 5px; /* Reduzido gap */
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px; /* Reduzido padding */
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+h1 {
+    font-size: 1.2rem; /* Reduzido tamanho */
+    color: var(--text-color);
+}
+
+.controls-top {
+    display: flex;
+    gap: 5px; /* Reduzido gap */
+}
+
+button {
+    background-color: var(--button-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 3px 8px; /* Reduzido padding */
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 0.8rem; /* Reduzido tamanho */
+}
+
+button:hover {
+    background-color: var(--button-hover);
+}
+
+.monitor-content {
+    display: flex;
+    flex: 1;
+    gap: 5px; /* Reduzido gap */
+    min-height: 0; /* Permite que o conteúdo encolha */
+}
+
+.graphs-container {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Reduzido gap */
+    min-height: 0; /* Permite que o conteúdo encolha */
+}
+
+.graph-wrapper {
+    flex: 1;
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    position: relative;
+    min-height: 0; /* Permite que o conteúdo encolha */
+}
+
+.graph-label {
+    position: absolute;
+    top: 3px; /* Reduzido */
+    left: 8px; /* Reduzido */
+    font-size: 0.8rem; /* Reduzido */
+    z-index: 2;
+    color: var(--text-color);
+}
+
+.graph-label select {
+    background-color: var(--panel-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 1px 3px; /* Reduzido */
+    font-size: 0.8rem; /* Reduzido */
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.parameters-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Reduzido */
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    padding: 5px; /* Reduzido */
+    min-width: 150px; /* Reduzido */
+    overflow-y: auto; /* Permite rolagem apenas nos parâmetros se necessário */
+}
+
+.parameter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3px; /* Reduzido */
+    border-bottom: 1px solid var(--border-color);
+}
+
+.param-label {
+    font-size: 0.7rem; /* Reduzido */
+    color: #888;
+}
+
+.param-value {
+    font-size: 1.5rem; /* Reduzido */
+    font-weight: bold;
+}
+
+.param-unit {
+    font-size: 0.7rem; /* Reduzido */
+    color: #888;
+}
+
+#hrParam .param-value {
+    color: var(--ecg-color);
+}
+
+#bpParam .param-value, #mapParam .param-value {
+    color: var(--pressure-color);
+}
+
+#spo2Param .param-value {
+    color: var(--spo2-color);
+}
+
+#rrParam .param-value {
+    color: var(--respiratory-color);
+}
+
+.controls-panel {
+    display: flex;
+    gap: 5px; /* Reduzido */
+    padding: 5px; /* Reduzido */
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    flex-shrink: 0;
+    max-height: 35vh; /* Limita altura do painel de controles */
+    overflow-y: auto; /* Permite rolagem apenas nos controles se necessário */
+}
+
+.control-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Reduzido */
+    min-width: 200px; /* Reduzido */
+}
+
+h3 {
+    font-size: 0.9rem; /* Reduzido */
+    margin-bottom: 3px; /* Reduzido */
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 3px; /* Reduzido */
+}
+
+.slider-control {
+    display: flex;
+    flex-direction: column;
+    gap: 2px; /* Reduzido */
+}
+
+label {
+    font-size: 0.7rem; /* Reduzido */
+}
+
+input[type="range"] {
+    width: 100%;
+    height: 15px; /* Reduzido altura */
+}
+
+select {
+    background-color: var(--button-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 2px 4px; /* Reduzido */
+    font-size: 0.8rem; /* Reduzido */
+}
+
+.toggle-control {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Reduzido */
+    font-size: 0.8rem; /* Reduzido */
+}
+
+.preset-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px; /* Reduzido */
+}
+
+/* No arquivo style.css, ajuste a classe .preset-btn */
+
+.preset-btn {
+    flex: 1 0 23%; /* Ajustado para 4 botões por linha */
+    padding: 4px;
+    font-size: 0.75rem;
+    margin: 1px;
+}
+
+/* Para telas menores, ajuste para 2 botões por linha */
+@media (max-width: 768px) {
+    .preset-btn {
+        flex: 1 0 46%;
+    }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .monitor-content {
+        flex-direction: column;
+    }
+    
+    .parameters-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        max-height: 120px; /* Limita altura em telas pequenas */
+    }
+    
+    .parameter {
+        flex: 1 0 30%;
+    }
+    
+    .controls-panel {
+        flex-direction: column;
+        max-height: 40vh; /* Aumenta um pouco em telas pequenas */
+    }
+    
+    .control-group {
+        min-width: 100%;
+    }
+}
+
+/* Ajustes para telas muito pequenas */
+@media (max-width: 480px) {
+    .container {
+        padding: 3px;
+    }
+    
+    header {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .controls-top {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .graph-label {
+        font-size: 0.7rem;
+    }
+    
+    .param-value {
+        font-size: 1.2rem;
+    }
+    
+    .preset-btn {
+        flex: 1 0 45%;
+        padding: 2px;
+        font-size: 0.65rem;
+    }
+    
+    h1 {
+        font-size: 1rem;
+    }
+    
+    button {
+        padding: 2px 5px;
+        font-size: 0.7rem;
+    }
+}
