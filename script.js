@@ -126,6 +126,6 @@ if (ctaButton) {
     ctaButton.addEventListener('click', (e) => {
         // e.preventDefault();
         // Redireciona para um site
-        window.location.href = 'app/app.html';
+        window.location.href = 'app.html';
     });
 }
