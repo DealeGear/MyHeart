@@ -569,3 +569,15 @@ body {
         height: 250px;
     }
 }
+.logo h1 {
+    font-size: 2rem; /* Tamanho do texto principal MyHeart */
+    display: flex; /* Alinha o texto e o span lado a lado */
+    align-items: flex-end; /* Alinha o texto menor na parte de baixo */
+    gap: 0.5rem; /* Espaço entre os dois textos */
+}
+
+.byline {
+    font-size: 0.8rem; /* Tamanho do texto menor */
+    font-weight: normal;
+    color: var(--light-text);
+}
