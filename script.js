@@ -124,8 +124,8 @@ if (videoPlaceholder) {
 const ctaButton = document.querySelector('.cta-button');
 if (ctaButton) {
     ctaButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        // Aqui você pode redirecionar para o app ou abrir um modal
-        alert('Redirecionando para o aplicativo MyHeart...');
+        // e.preventDefault();
+        // Redireciona para um site
+        window.location.href = 'app/app.html';
     });
 }
