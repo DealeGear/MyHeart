@@ -3,156 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Monitor Cardíaco Virtual</title>
+    <title>MyHeart – Monitor Cardíaco Virtual</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Monitor Cardíaco Virtual</h1>
-            <div class="controls-top">
-                <button id="resetBtn">Reset</button>
-                <button id="pauseBtn">Pausar</button>
-                <button id="soundBtn">Som: ON</button>
+    <!-- Cabeçalho -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <h1>MyHeart</h1>
             </div>
-        </header>
-        
-        <main class="monitor-content">
-            <div class="graphs-container">
-                <div class="graph-wrapper">
-                    <div class="graph-label">ECG (II)</div>
-                    <canvas id="ecgCanvas"></canvas>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="#inicio" class="nav-link">Início</a></li>
+                    <li><a href="#funcionalidades" class="nav-link">Funcionalidades</a></li>
+                    <li><a href="#demonstracao" class="nav-link">Demonstração</a></li>
+                    <li><a href="#contato" class="nav-link">Contato</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
-                <div class="graph-wrapper">
-                    <div class="graph-label">
-                        <select id="paramSelect">
-                            <option value="pressure">Pressão Arterial</option>
-                            <option value="spo2">SpO₂</option>
-                            <option value="respiratory">Frequência Respiratória</option>
-                        </select>
-                    </div>
-                    <canvas id="paramCanvas"></canvas>
-                </div>
-            </div>
-            
-            <div class="parameters-container">
-                <div class="parameter" id="hrParam">
-                    <div class="param-label">FC</div>
-                    <div class="param-value" id="hrValue">75</div>
-                    <div class="param-unit">bpm</div>
-                </div>
-                <div class="parameter" id="bpParam">
-                    <div class="param-label">PA</div>
-                    <div class="param-value" id="bpValue">120/80</div>
-                    <div class="param-unit">mmHg</div>
-                </div>
-                <div class="parameter" id="mapParam">
-                    <div class="param-label">MAP</div>
-                    <div class="param-value" id="mapValue">93</div>
-                    <div class="param-unit">mmHg</div>
-                </div>
-                <div class="parameter" id="spo2Param">
-                    <div class="param-label">SpO₂</div>
-                    <div class="param-value" id="spo2Value">98</div>
-                    <div class="param-unit">%</div>
-                </div>
-                <div class="parameter" id="rrParam">
-                    <div class="param-label">FR</div>
-                    <div class="param-value" id="rrValue">16</div>
-                    <div class="param-unit">rpm</div>
-                </div>
-                <div class="parameter" id="rhythmParam">
-                    <div class="param-label">Ritmo</div>
-                    <div class="param-value" id="rhythmValue">Sinusal</div>
-                </div>
-            </div>
-        </main>
-        
-        <footer class="controls-panel">
-            <div class="control-group">
-                <h3>Controles Fisiológicos</h3>
-                <div class="slider-control">
-                    <label for="hrSlider">Frequência Cardíaca (bpm)</label>
-                    <input type="range" id="hrSlider" min="30" max="220" value="75">
-                    <span id="hrSliderValue">75</span>
-                </div>
-                <div class="slider-control">
-                    <label for="contractilitySlider">Contractilidade (%)</label>
-                    <input type="range" id="contractilitySlider" min="0" max="200" value="100">
-                    <span id="contractilitySliderValue">100%</span>
-                </div>
-                <div class="slider-control">
-                    <label for="preloadSlider">Pré-carga (%)</label>
-                    <input type="range" id="preloadSlider" min="0" max="200" value="100">
-                    <span id="preloadSliderValue">100%</span>
-                </div>
-                <div class="slider-control">
-                    <label for="afterloadSlider">Pós-carga (%)</label>
-                    <input type="range" id="afterloadSlider" min="0" max="200" value="100">
-                    <span id="afterloadSliderValue">100%</span>
-                </div>
-                <div class="slider-control">
-                    <label for="fio2Slider">FiO₂ (%)</label>
-                    <input type="range" id="fio2Slider" min="10" max="100" value="21">
-                    <span id="fio2SliderValue">21%</span>
-                </div>
-                <div class="slider-control">
-                    <label for="volumeSlider">Volume Sanguíneo (%)</label>
-                    <input type="range" id="volumeSlider" min="50" max="120" value="100">
-                    <span id="volumeSliderValue">100%</span>
-                </div>
-                <div class="slider-control">
-                    <label for="audioVolumeSlider">Volume Áudio</label>
-                    <input type="range" id="audioVolumeSlider" min="0" max="100" value="50">
-                    <span id="audioVolumeSliderValue">50%</span>
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <h3>Arritmias</h3>
-                <select id="arrhythmiaSelect">
-                    <option value="normal">Sinusal Normal</option>
-                    <option value="tachycardia">Taquicardia Sinusal</option>
-                    <option value="bradycardia">Bradicardia Sinusal</option>
-                    <option value="atrialFibrillation">Fibrilação Atrial</option>
-                    <option value="atrialFlutter">Flutter Atrial</option>
-                    <option value="pvcs">Extrassístoles Ventriculares</option>
-                    <option value="vt">Taquicardia Ventricular</option>
-                    <option value="avBlock">Bloqueio AV</option>
-                </select>
-                
-                <div class="toggle-control">
-                    <label for="ischemiaToggle">Isquemia/Hipóxia</label>
-                    <input type="checkbox" id="ischemiaToggle">
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <h3>Presets</h3>
-               <!-- No arquivo index.html, na seção de preset-buttons, adicione os seguintes botões: -->
+            </nav>
+        </div>
+    </header>
 
-<div class="preset-buttons">
-    <button class="preset-btn" data-preset="normal">Normal</button>
-    <button class="preset-btn" data-preset="tachycardia">Taquicardia</button>
-    <button class="preset-btn" data-preset="bradycardia">Bradicardia</button>
-    <button class="preset-btn" data-preset="atrialFibrillation">FA</button>
-    <button class="preset-btn" data-preset="vt">TV</button>
-    <button class="preset-btn" data-preset="hypovolemia">Hipovolemia</button>
-    <button class="preset-btn" data-preset="hypoxia">Hipóxia</button>
-    
-    <!-- Novos botões -->
-    <button class="preset-btn" data-preset="septicShock">Choque Séptico</button>
-    <button class="preset-btn" data-preset="cardiogenicShock">Choque Cardiogênico</button>
-    <button class="preset-btn" data-preset="hypertensiveCrisis">Crise Hipertensiva</button>
-    <button class="preset-btn" data-preset="pulmonaryEdema">Edema Pulmonar</button>
-    <button class="preset-btn" data-preset="mildHypoxia">Hipóxia Leve</button>
-    <button class="preset-btn" data-preset="severeHypoxia">Hipóxia Grave</button>
-    <button class="preset-btn" data-preset="anemia">Anemia</button>
-</div>
+    <!-- Seção Hero -->
+    <section class="hero" id="inicio">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h2 class="hero-title">Monitore a saúde cardíaca de forma interativa e em tempo real</h2>
+                <p class="hero-subtitle">Simule, aprenda e visualize parâmetros cardíacos de forma simples e moderna</p>
+                <a href="#app" class="cta-button">
+                    <i class="fas fa-play"></i>
+                    Acessar o App
+                </a>
             </div>
-        </footer>
-    </div>
-    
+            <div class="hero-visual">
+                <div class="ecg-animation">
+                    <svg viewBox="0 0 400 200">
+                        <path d="M0,100 L50,100 L60,50 L70,150 L80,100 L400,100" stroke="#00ff00" stroke-width="3" fill="none">
+                            <animate attributeName="stroke-dasharray" from="0 1000" to="1000 0" dur="3s" repeatCount="indefinite"/>
+                        </path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Funcionalidades -->
+    <section class="features" id="funcionalidades">
+        <div class="container">
+            <h2 class="section-title">Funcionalidades</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Gráficos em tempo real</h3>
+                    <p>Visualize ECG, pressão arterial e SpO₂ com gráficos dinâmicos e precisão médica</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <h3>Controle de parâmetros</h3>
+                    <p>Ajuste frequência cardíaca, pressão, oxigenação e outros parâmetros fisiológicos</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart-broken"></i>
+                    </div>
+                    <h3>Presets clínicos</h3>
+                    <p>Simule diversas arritmias e condições cardíacas com presets pré-configurados</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-volume-up"></i>
+                    </div>
+                    <h3>Som sincronizado</h3>
+                    <p>Ative sons de batimentos cardíacos sincronizados com o ritmo monitorado</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Demonstração -->
+    <section class="demonstration" id="demonstracao">
+        <div class="container">
+            <h2 class="section-title">Demonstração</h2>
+            <div class="demo-content">
+                <div class="demo-video">
+                    <div class="video-placeholder">
+                        <i class="fas fa-play-circle"></i>
+                        <p>Vídeo demonstrativo do MyHeart em ação</p>
+                    </div>
+                </div>
+                <div class="demo-info">
+                    <h3>Veja o MyHeart funcionando</h3>
+                    <p>Assista nossa demonstração e descubra como é fácil monitorar e simular condições cardíacas com nossa plataforma intuitiva e profissional.</p>
+                    <ul class="demo-highlights">
+                        <li><i class="fas fa-check"></i> Interface intuitiva e moderna</li>
+                        <li><i class="fas fa-check"></i> Gráficos em tempo real</li>
+                        <li><i class="fas fa-check"></i> Simulações realistas</li>
+                        <li><i class="fas fa-check"></i> Ideal para aprendizado</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Contato/Rodapé -->
+    <footer class="footer" id="contato">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <i class="fas fa-heartbeat"></i>
+                        <h1>MyHeart</h1>
+                    </div>
+                    <p>Monitor Cardíaco Virtual</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Conecte-se</h4>
+                    <div class="social-links">
+                        <a href="https://github.com" target="_blank" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="mailto:contato@myheart.com" aria-label="E-mail">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://twitter.com" target="_blank" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 MyHeart – Monitor Cardíaco Virtual. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botão Voltar ao Topo -->
+    <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
     <script src="script.js"></script>
 </body>
 </html>
