@@ -1,7 +1,3 @@
-Perfeito! Aqui está uma **versão Markdown estendida** da documentação do projeto **MyHeart – Monitor Cardíaco Virtual**, pronta para GitHub ou qualquer repositório, detalhando todas as seções, exemplos de uso e sugestões de extensão.
-
----
-
 # MyHeart – Monitor Cardíaco Virtual
 
 ![Banner do Projeto](assets/images/banner.png)
@@ -183,8 +179,4 @@ MyHeart/
 * Pode ser copiado, modificado e aperfeiçoado, mantendo **atribuição ao autor original**.
 * **Não usar como dispositivo médico real**.
 
----
 
-Se você quiser, posso **gerar já um README.md pronto com links de imagens e assets fictícios**, pronto para subir direto no GitHub como base inicial do projeto.
-
-Quer que eu faça isso?
