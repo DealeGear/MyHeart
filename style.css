@@ -145,6 +145,7 @@ body {
     position: relative;
     overflow: hidden;
     padding-top: 80px;
+    
 }
 
 .hero-bg {
@@ -159,6 +160,7 @@ body {
         radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.05) 0%, transparent 50%),
         var(--dark-bg);
     z-index: -1;
+    padding-bottom: 50px; /* Adiciona espaço abaixo do conteúdo */
 }
 
 .hero .container {
@@ -166,6 +168,7 @@ body {
     grid-template-columns: 1fr 1fr;
     gap: 60px;
     align-items: center;
+    
 }
 
 .hero-title {
@@ -189,7 +192,7 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 35px 40px;
+    padding: 15px 40px;
     background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
     color: var(--dark-bg);
     text-decoration: none;
@@ -580,4 +583,7 @@ body {
     font-size: 0.8rem; /* Tamanho do texto menor */
     font-weight: normal;
     color: var(--light-text);
+}
+.features {
+    margin-top: 100px; /* Adiciona um espaço no topo da seção */
 }
