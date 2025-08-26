@@ -146,6 +146,7 @@ body {
     overflow: hidden;
     padding-top: 10px;
     
+    
 }
 
 .hero-bg {
@@ -585,5 +586,5 @@ body {
     color: var(--light-text);
 }
 .features {
-    margin-top: 100px; /* Adiciona um espaço no topo da seção */
+    margin-top: 10px; /* Adiciona um espaço no topo da seção */
 }
