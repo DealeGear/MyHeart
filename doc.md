@@ -1,6 +1,5 @@
 # MyHeart – Monitor Cardíaco Virtual
 
-![Banner do Projeto](assets/images/banner.png)
 
 > **MyHeart** é um aplicativo web educativo que simula **parâmetros cardíacos em tempo real**, permitindo visualizar ECG, pressão arterial, SpO₂ e outros sinais vitais, com controles para alterar frequência cardíaca, pré/pós-carga, inotropismo, FiO₂ e simular arritmias.
 > Ideal para estudantes, profissionais de saúde e entusiastas da fisiologia cardiovascular.
